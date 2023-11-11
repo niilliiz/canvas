@@ -57,6 +57,25 @@ function generatePackMan(ctx, x, y, r, startAngle, endAngle) {
 generatePackMan(c, 220, 200, 25, Math.PI / 4, (7 * Math.PI) / 4);
 
 // HUNTER
-function generateHunter(ctx, x, y, r, startAngle, endAngle, isClockWise) {}
+function generateHunter(ctx, x, y, r, startAngle, endAngle, isClockWise) {
+  const height = 40;
+  const unit = r / 3;
 
-generateHunter(c, 500, 350, 25, 0, Math.PI, true);
+  // Body
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.lineTo(x, y - height);
+  ctx.quadraticCurveTo(x + r, y - height - 1.4 * r, x + 2 * r, y - height);
+  ctx.lineTo(x + 2 * r, y);
+  ctx.lineTo(x + 2 * r - unit, y - unit);
+  ctx.lineTo(x + 2 * r - 2 * unit, y);
+  ctx.lineTo(x + 2 * r - 3 * unit, y - unit);
+  ctx.lineTo(x + 2 * r - 4 * unit, y);
+  ctx.lineTo(x + 2 * r - 5 * unit, y - unit);
+  ctx.lineTo(x + 2 * r - 6 * unit, y);
+  ctx.fill();
+
+  // Left Eye
+}
+
+generateHunter(c, 500, 350, 30, 0, Math.PI, true);
