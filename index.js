@@ -8,7 +8,6 @@ let h = window.innerHeight;
 let ctx = canvas.getContext("2d");
 
 //GRADIENT
-
 // createLinearGradient(x1, y1, x2, y2)
 // createRadialGradient(x1, y1, r1, x2, y2, r2)
 // createConicGradient(angle, x, y)
@@ -66,3 +65,11 @@ let ctx = canvas.getContext("2d");
 //
 // ctx.fillStyle = radial3;
 // ctx.fillRect(0, 0, 120, 250);
+
+// Conic
+// const conic = ctx.createConicGradient(4, 62, 75);
+// conic.addColorStop(0, "#a7d30c");
+// conic.addColorStop(1, "#fff");
+//
+// ctx.fillStyle = conic;
+// ctx.fillRect(12, 25, 100, 100);
