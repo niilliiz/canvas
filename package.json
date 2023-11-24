@@ -6,8 +6,16 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/niilliiz/canvas.git"
+  },
   "author": "",
-  "license": "ISC",
+  "license": "ISC", "bugs": {
+  "url": "https://github.com/niilliiz/canvas/issues"
+},
+  "homepage": "https://github.com/niilliiz/canvas#readme",
+
   "devDependencies": {
     "eslint": "^8.52.0",
     "eslint-plugin-react": "^7.33.2",
