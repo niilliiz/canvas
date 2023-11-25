@@ -6,7 +6,7 @@ export function randomColor(colors) {
   return colors[Math.floor(Math.random() * colors.length)];
 }
 
-export function distance(x1, y1, x2, y2) {
+export function getDistance(x1, y1, x2, y2) {
   const xDist = x2 - x1;
   const yDist = y2 - y1;
 
