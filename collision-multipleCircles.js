@@ -1,5 +1,10 @@
 // noinspection DuplicatedCode
-import { getDistance, randomIntFromRange, resolveCollision } from "./utils.js";
+import {
+  getDistance,
+  randomColor,
+  randomIntFromRange,
+  resolveCollision,
+} from "./utils/utils.js";
 
 let canvas = document.querySelector(".canvas");
 
@@ -34,6 +39,7 @@ function handleMouseMove(e) {
   mouse.x = e.x;
   mouse.y = e.y;
 }
+
 window.addEventListener("click", handleClick);
 
 function handleClick() {
@@ -53,16 +59,22 @@ function Particle(x, y, radius, color) {
   this.x = x;
   this.y = y;
   this.velocity = {
-    x: Math.random() - 0.5,
-    y: Math.random() - 0.5,
+    x: (Math.random() - 0.5) * 5,
+    y: (Math.random() - 0.5) * 5,
   };
   this.radius = radius;
   this.color = color;
   this.mass = 1;
+  this.opacity = 0;
 
   this.draw = function () {
     c.beginPath();
     c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+    c.save();
+    c.globalAlpha = this.opacity;
+    c.fillStyle = this.color;
+    c.fill();
+    c.restore();
     c.strokeStyle = this.color;
     c.stroke();
     c.closePath();
@@ -92,6 +104,17 @@ function Particle(x, y, radius, color) {
       this.velocity.y = -this.velocity.y;
     }
 
+    //  mouse collision detection
+    if (
+      getDistance(mouse.x, mouse.y, this.x, this.y) < 120 &&
+      this.opacity < 0.2
+    ) {
+      this.opacity += 0.02;
+    } else if (this.opacity > 0) {
+      this.opacity -= 0.02;
+      this.opacity = Math.max(0, this.opacity);
+    }
+
     this.x += this.velocity.x;
     this.y += this.velocity.y;
   };
@@ -102,11 +125,11 @@ function Particle(x, y, radius, color) {
 let particles = null;
 function init() {
   particles = [];
-  for (let i = 0; i < 10; i++) {
-    const radius = 100;
+  for (let i = 0; i < 250; i++) {
+    const radius = 15;
     let x = randomIntFromRange(radius, canvas.width - radius);
     let y = randomIntFromRange(radius, canvas.height - radius);
-    const color = "blue";
+    const color = randomColor(colorArray);
 
     if (i !== 0) {
       for (let j = 0; j < particles.length; j++) {
