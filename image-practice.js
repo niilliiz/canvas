@@ -1,4 +1,8 @@
-import { getDistance, randomIntFromRange } from "./utils/utils.js";
+import {
+  getDistance,
+  randomIntFromRange,
+  resolveCollision,
+} from "./utils/utils.js";
 
 let canvas = document.querySelector(".canvas");
 canvas.width = window.innerWidth;
@@ -24,12 +28,46 @@ function Shape(img, x, y, w, h) {
   this.w = w;
   this.h = h;
   this.img = img;
+  this.mass = 1;
+  this.velocity = {
+    x: (Math.random() - 0.5) * 0.4,
+    y: (Math.random() - 0.5) * 0.4,
+  };
 
   this.draw = function () {
     c.drawImage(this.img, this.x, this.y, this.w, this.h);
   };
-  this.update = function () {
+
+  this.update = function (shapes) {
     this.draw();
+
+    for (let i = 0; i < shapes.length; i++) {
+      if (this === shapesList[i]) {
+        continue;
+      }
+
+      // detect if shapes hit each other
+      if (
+        this.x + this.w >= shapes[i].x &&
+        this.x <= shapes[i].x + shapes[i].w &&
+        this.y + this.h >= shapes[i].y &&
+        this.y <= shapes[i].y + shapes[i].h
+      ) {
+        resolveCollision(this, shapes[i]);
+      }
+
+      // detect if they hit the edges
+      if (this.x <= 0 || this.x + this.w >= canvas.width) {
+        this.velocity.x = -this.velocity.x;
+      }
+
+      if (this.y <= 0 || this.y + this.h >= canvas.height) {
+        this.velocity.y = -this.velocity.y;
+      }
+
+      this.x += this.velocity.x;
+      this.y += this.velocity.y;
+    }
   };
 }
 
@@ -59,21 +97,34 @@ let shapesList = null;
 function initImage() {
   shapesList = [];
   for (let i = 0; i < images.length; i++) {
-    let x = randomIntFromRange(0, canvas.width);
-    let y = randomIntFromRange(0, canvas.height);
+    let x = randomIntFromRange(
+      imageSources[i].width,
+      canvas.width - imageSources[i].width,
+    );
+    let y = randomIntFromRange(
+      imageSources[i].height,
+      canvas.height - imageSources[i].height,
+    );
+
     let w = imageSources[i].width;
     let h = imageSources[i].height;
 
     if (i !== 0) {
       for (let j = 0; j < shapesList.length; j++) {
         if (
-          x + w > shapesList[j].x &&
-          x < shapesList[j].x + shapesList[j].w &&
-          y + h > shapesList[j].y &&
-          y < shapesList[j].y + shapesList[j].h
+          x + w >= shapesList[j].x &&
+          x <= shapesList[j].x + shapesList[j].w &&
+          y + h >= shapesList[j].y &&
+          y <= shapesList[j].y + shapesList[j].h
         ) {
-          x = randomIntFromRange(0, canvas.width);
-          y = randomIntFromRange(0, canvas.height);
+          x = randomIntFromRange(
+            imageSources[i].width,
+            canvas.width - imageSources[i].width,
+          );
+          y = randomIntFromRange(
+            imageSources[i].height,
+            canvas.height - imageSources[i].height,
+          );
           j = -1;
         }
       }
@@ -83,11 +134,10 @@ function initImage() {
   }
 }
 function animate() {
-  // requestAnimationFrame(animate);
-  // c.clearRect(0, 0, canvas.width, canvas.height);
-  shapesList.forEach((shape) => shape.update());
+  requestAnimationFrame(animate);
+  c.clearRect(0, 0, canvas.width, canvas.height);
+  shapesList.forEach((shape) => shape.update(shapesList));
 }
 
-console.log(shapesList);
-
 initImage();
+animate();

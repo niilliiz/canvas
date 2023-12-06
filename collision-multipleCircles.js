@@ -96,6 +96,7 @@ function Particle(x, y, radius, color) {
       }
     }
 
+    // detecting if particle hit the edges
     if (this.x - this.radius <= 0 || this.x + this.radius >= canvas.width) {
       this.velocity.x = -this.velocity.x;
     }
