@@ -4,7 +4,7 @@ import {
   randomColor,
   randomIntFromRange,
   resolveCollision,
-} from "./utils/utils.js";
+} from "../utils/utils.js";
 
 let canvas = document.querySelector(".canvas");
 
